@@ -1,6 +1,6 @@
 "use client";
 
-import { SelectAdvocates } from "@/db/schema";
+import type { SelectAdvocates } from "@/db/schema";
 import { typedFetch } from "@/utils/typedFetch";
 import { useEffect, useState } from "react";
 
@@ -12,19 +12,17 @@ export default function Home() {
   );
 
   useEffect(() => {
-    console.log("fetching advocates...");
     async function getAdvocates() {
       try {
         const advocateData = await typedFetch<{ data: SelectAdvocates[] }>(
           "/api/advocates"
         );
-        console.log({ advocateData });
         if (advocateData?.data && advocateData.data.length) {
           setAdvocates(advocateData.data);
           setFilteredAdvocates(advocateData.data);
         }
       } catch (error) {
-        console.warn('Error when fetching files', error)
+        console.warn('Error when fetching advocate list', error)
       }
     }
     getAdvocates();
@@ -34,7 +32,6 @@ export default function Home() {
     const searchTerm = e.target.value.trim()?.toLowerCase();
     setSearchTerm(searchTerm);
 
-    console.log("filtering advocates...");
     const filteredAdvocates = advocates.filter((advocate) => {
       return (
         advocate.firstName.toLowerCase().includes(searchTerm) ||
@@ -52,8 +49,8 @@ export default function Home() {
   };
 
   const onClick = () => {
-    console.log(advocates);
     setFilteredAdvocates(advocates);
+    setSearchTerm('')
   };
 
   return (
@@ -66,7 +63,7 @@ export default function Home() {
         <p>
           Searching for: <span id="search-term">{searchTerm}</span>
         </p>
-        <input style={{ border: "1px solid black" }} onChange={onChange} />
+        <input style={{ border: "1px solid black" }} onChange={onChange} value={searchTerm} />
         <button onClick={onClick}>Reset Search</button>
       </div>
       <br />

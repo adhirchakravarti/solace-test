@@ -8,7 +8,6 @@ export interface AdvocateContextType {
   advocates: SelectAdvocates[];
   setAdvocates: React.Dispatch<React.SetStateAction<SelectAdvocates[]>>;
   filteredAdvocates: SelectAdvocates[];
-//   setFilteredAdvocates: React.Dispatch<React.SetStateAction<SelectAdvocates[]>>;
 }
 
 export const AdvocateContext = createContext<AdvocateContextType | null>(
@@ -29,9 +28,6 @@ export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [searchTerm, setSearchTerm] = React.useState<string>("");
   const [advocates, setAdvocates] = React.useState<SelectAdvocates[]>([]);
-//   const [filteredAdvocates, setFilteredAdvocates] = React.useState<
-//     SelectAdvocates[]
-//   >([]);
 
   useEffect(() => {
     console.log("Advocates updated:", advocates);

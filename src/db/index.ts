@@ -8,11 +8,18 @@ const setup = () => {
       select: () => ({
         from: () => [],
       }),
+      insert: () => ({
+        values: () => ({
+          returning: () => [],
+        }),
+      }),
     };
   }
 
   // for query purposes
-  const queryClient = postgres(process.env.DATABASE_URL);
+  const queryClient = postgres(process.env.DATABASE_URL, {
+    database: "solaceassignment",
+  });
   const db = drizzle(queryClient);
   return db;
 };

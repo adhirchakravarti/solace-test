@@ -34,16 +34,17 @@ export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [advocates]);
 
   const filteredAdvocates = useMemo(() => {
+    const trimmedSearchTerm = searchTerm.trim();
     return advocates.filter((advocate) => {
       return (
-        advocate.firstName.toLowerCase().includes(searchTerm) ||
-        advocate.lastName.toLowerCase().includes(searchTerm) ||
-        advocate.city.toLowerCase().includes(searchTerm) ||
-        advocate.degree.toLowerCase().includes(searchTerm) ||
+        advocate.firstName.toLowerCase().includes(trimmedSearchTerm) ||
+        advocate.lastName.toLowerCase().includes(trimmedSearchTerm) ||
+        advocate.city.toLowerCase().includes(trimmedSearchTerm) ||
+        advocate.degree.toLowerCase().includes(trimmedSearchTerm) ||
         advocate.specialties.some((s) =>
-          s.toLowerCase().includes(searchTerm)
+          s.toLowerCase().includes(trimmedSearchTerm)
         ) ||
-        advocate.yearsOfExperience.toString().includes(searchTerm)
+        advocate.yearsOfExperience.toString().includes(trimmedSearchTerm)
       );
     });
   }, [advocates, searchTerm]);

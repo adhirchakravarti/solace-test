@@ -9,7 +9,7 @@ export function AdvocateSearch() {
     useAdvocateContext();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = e.target.value.trim()?.toLowerCase();
+    const searchTerm = e.target.value.toLowerCase();
     setSearchTerm(searchTerm);
   };
 
@@ -21,7 +21,7 @@ export function AdvocateSearch() {
     <div>
       <p>Search</p>
       <p>
-        Searching for: <span id="search-term">{searchTerm}</span>
+        Searching for: <span id="search-term">{searchTerm.trim()}</span>
       </p>
       <input
         style={{ border: "1px solid black" }}

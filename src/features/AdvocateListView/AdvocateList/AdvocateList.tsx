@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { useAdvocateContext } from "../advocate-context";
+import { useAdvocateContext } from "@/features/AdvocateListView/advocate-context";
 
 export function AdvocateList() {
   const { advocates } = useAdvocateContext();

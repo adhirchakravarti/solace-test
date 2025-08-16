@@ -1,7 +1,7 @@
 import type { SelectAdvocates } from "@/db/schema";
 import { typedFetch } from "@/utils/typedFetch";
 
-import { AdvocateListView } from "@/feature-components/AdvocateListView/AdvocateListView";
+import { AdvocateListView } from "@/features/AdvocateListView/AdvocateListView";
 
 export default async function Home({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
   let advocateList: SelectAdvocates[] = [];

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import db from "../../../db";
-import { advocates } from "../../../db/schema";
 import { sql } from "drizzle-orm";
+
+import db from "@/db";
+import { advocates } from "@/db/schema";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;

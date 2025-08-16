@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useAdvocateContext } from "./advocate-context";
-import { AdvocateList } from "./AdvocateList/AdvocateList";
 
 import type { SelectAdvocates } from "@/db/schema";
-import { AdvocateSearch } from "./AdvocateSearch/AdvocateSearch";
+
+import { useAdvocateContext } from "@/features/AdvocateListView/advocate-context";
+import { AdvocateList } from "@/features/AdvocateListView/AdvocateList/AdvocateList";
+import { AdvocateSearch } from "@/features/AdvocateListView/AdvocateSearch/AdvocateSearch";
 
 interface AdvocateListViewProps {
   advocates: SelectAdvocates[];

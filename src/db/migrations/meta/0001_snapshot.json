@@ -1,0 +1,100 @@
+{
+  "id": "87690f49-503f-44e5-8494-99261f49fbc7",
+  "prevId": "c486d0a0-ad32-4f32-bd3f-880bc74a6050",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "SolaceHealth.advocates": {
+      "name": "advocates",
+      "schema": "SolaceHealth",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "city": {
+          "name": "city",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "degree": {
+          "name": "degree",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "payload": {
+          "name": "payload",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "years_of_experience": {
+          "name": "years_of_experience",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {
+        "search_index": {
+          "name": "search_index",
+          "columns": [
+            {
+              "expression": "(\n      setweight(to_tsvector('english', \"first_name\"), 'A') ||\n      setweight(to_tsvector('english', \"last_name\"), 'A') ||\n      setweight(to_tsvector('english', \"city\"), 'B') ||\n      setweight(to_tsvector('english', \"degree\"), 'B') ||\n      setweight(to_tsvector('english', \"payload\"), 'C') ||\n      setweight(to_tsvector('english', \"years_of_experience\"::text), 'D') ||\n      setweight(to_tsvector('english', \"phone_number\"::text), 'D')\n    )",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "SolaceHealth": "SolaceHealth"
+  },
+  "sequences": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

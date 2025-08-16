@@ -15,7 +15,6 @@ export function AdvocateListView({ advocates }: AdvocateListViewProps) {
   const { setAdvocates } = useAdvocateContext();
 
   useEffect(() => {
-    console.log({ advocates });
     setAdvocates(advocates);
   }, [advocates, setAdvocates]);
 

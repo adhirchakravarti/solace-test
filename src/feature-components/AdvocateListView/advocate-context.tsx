@@ -36,12 +36,10 @@ export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  console.log({ pathname });
 
   const getAdvocates = async (searchTerm: string) => {
     try {
       const url = `/advocates${searchTerm ? `?searchTerm=${searchTerm}` : ""}`;
-      console.log("Fetching advocates with URL:", url);
       const data = await typedFetch<{ data: SelectAdvocates[] }>(url);
       if (data?.data && data.data.length) {
         setAdvocates(data.data);
@@ -54,7 +52,6 @@ export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const throttledCallback = useDebouncedCallback((searchTerm: string) => {
-    console.log("Throttled search term:", searchTerm);
     getAdvocates(searchTerm);
   }, 800);
 
@@ -66,17 +63,12 @@ export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
   const handleUpdateSearchParams = useCallback(
     (trimmedSearchTerm: string) => {
       const params = new URLSearchParams(searchParams);
-      console.log({ trimmedSearchTerm });
       if (trimmedSearchTerm) {
         params.set("searchTerm", trimmedSearchTerm);
       } else {
         params.delete("searchTerm");
       }
-      console.log("Updated Search Params:", {
-        params: params,
-        paramsSize: params.size,
-        paramsString: params.toString(),
-      });
+      
       window.history.pushState(
         null,
         "",
@@ -85,10 +77,6 @@ export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [pathname, searchParams]
   );
-
-  useEffect(() => {
-    console.log("Advocates updated:", advocates);
-  }, [advocates]);
 
   useEffect(() => {
     const trimmedSearchTerm = searchTerm.trim();

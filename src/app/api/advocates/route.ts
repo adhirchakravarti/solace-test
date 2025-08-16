@@ -6,7 +6,6 @@ import { sql } from "drizzle-orm";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const searchQuery = searchParams.get("searchTerm") ?? "";
-  console.log("Search Query:", searchQuery);
 
   try {
     if (!searchQuery) {
@@ -23,10 +22,8 @@ export async function GET(request: NextRequest) {
       setweight(to_tsvector('english', ${advocates.phoneNumber}::text), 'D')
       @@ to_tsquery('english', ${searchQuery})
     )`);
-    console.log("New Data:", { newData: data });
     return NextResponse.json({ data, status: 200, ok: true });
   } catch (error) {
-    console.log("Route handler error when fetching newData: ", error);
     return NextResponse.json({ data: null, error: "Failed to fetch advocates", status: 500 });
   }
 }

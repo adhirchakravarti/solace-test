@@ -1,5 +1,9 @@
+import 'dotenv/config';
+
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export async function typedFetch<T>(url: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(url, options);
+  const response = await fetch(`${baseUrl}${url}`, options);
 
   if (!response.ok) {
     // Handle HTTP errors (e.g., 404, 500)

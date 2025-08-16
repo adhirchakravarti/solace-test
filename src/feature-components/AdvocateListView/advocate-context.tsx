@@ -1,6 +1,11 @@
-import React, { createContext, useContext, useEffect, useMemo } from "react";
+import { useSearchParams, usePathname } from 'next/navigation'
+
+import React, { createContext, useCallback, useContext, useEffect } from "react";
+
+import { useDebouncedCallback } from 'use-debounce'
 
 import type { SelectAdvocates } from "@/db/schema";
+import { typedFetch } from '@/utils/typedFetch';
 
 export interface AdvocateContextType {
   searchTerm: string;
@@ -26,28 +31,57 @@ export const useAdvocateContext = (): AdvocateContextType => {
 export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [searchTerm, setSearchTerm] = React.useState<string>("");
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const handleUpdateSearchParams = useCallback((trimmedSearchTerm: string) => {
+    const params = new URLSearchParams(searchParams);
+    console.log({ trimmedSearchTerm })
+    if (trimmedSearchTerm) {
+      params.set('searchTerm', trimmedSearchTerm);
+    } else {
+      params.delete('searchTerm');
+    }
+    console.log("Updated Search Params:", { params: params,  paramsSize: params.size, paramsString: params.toString() });
+    window.history.pushState(null, '', `${params.size ? `?${params.toString()}` : ''}`)
+  }, [searchParams]);
+
+  const getAdvocates = async (searchTerm: string) => {
+    try {
+      // const searchQuery = searchParams.get('searchTerm') || '';
+      const url = `/advocates${searchTerm ? `?searchTerm=${searchTerm}` : ''}`;
+      console.log("Fetching advocates with URL:", url);
+      const data = await typedFetch<{ data: SelectAdvocates[] }>(url);
+      if (data?.data && data.data.length) {
+        setAdvocates(data.data);
+      } else {
+        setAdvocates([]);
+      }
+    } catch (error) {
+      console.warn("Error when fetching advocate list on client side", error);
+    }
+  };
+
+  const throttledCallback = useDebouncedCallback((searchTerm: string) => {
+    console.log("Throttled search term:", searchTerm);
+    getAdvocates(searchTerm);
+  }, 500);
+
+  const [searchTerm, setSearchTerm] = React.useState<string>(searchParams.get('searchTerm') || '');
   const [advocates, setAdvocates] = React.useState<SelectAdvocates[]>([]);
 
   useEffect(() => {
     console.log("Advocates updated:", advocates);
   }, [advocates]);
 
-  const filteredAdvocates = useMemo(() => {
+  useEffect(() => {
     const trimmedSearchTerm = searchTerm.trim();
-    return advocates.filter((advocate) => {
-      return (
-        advocate.firstName.toLowerCase().includes(trimmedSearchTerm) ||
-        advocate.lastName.toLowerCase().includes(trimmedSearchTerm) ||
-        advocate.city.toLowerCase().includes(trimmedSearchTerm) ||
-        advocate.degree.toLowerCase().includes(trimmedSearchTerm) ||
-        advocate.specialties.some((s) =>
-          s.toLowerCase().includes(trimmedSearchTerm)
-        ) ||
-        advocate.yearsOfExperience.toString().includes(trimmedSearchTerm)
-      );
-    });
-  }, [advocates, searchTerm]);
+    console.log("Search Term:", trimmedSearchTerm);
+    handleUpdateSearchParams(trimmedSearchTerm);
+    if (pathname === '/') {
+      throttledCallback(trimmedSearchTerm);
+    }
+  }, [searchTerm, pathname, throttledCallback, handleUpdateSearchParams])
 
   return (
     <AdvocateContext.Provider
@@ -56,10 +90,11 @@ export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
         setSearchTerm,
         advocates,
         setAdvocates,
-        filteredAdvocates,
+        filteredAdvocates: advocates,
       }}
     >
       {children}
     </AdvocateContext.Provider>
   );
 };
+

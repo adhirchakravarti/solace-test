@@ -15,9 +15,7 @@ Since there was a search input to filter the advocate list, I think it was impor
 
 I realized that to improve performance on the backend, we need to filter at the query level. This proved a little bit tricky due to my inexperience with drizzle-orm. Eventually I arrived at the solution that is satisfactory considering the time-constraints. If I had more time, I would improve it such that even the phone numbers are searchable; currently that doesn't work. 
 
-### Issues
-
-A few of the queries I tried before settling on the current one:
+Some of my naive attempts are filtering at the SQL query  level before settling on the current approach:
 
 ```
 const data = await db
@@ -31,6 +29,8 @@ const data = await db
         .or(ilike(advocates.specialties, `%${searchQuery}%`))
         .or(ilike(advocates.yearsOfExperience, `%${searchQuery}%`))
     );
+```
+```
   const data = await db.query.advocates.findMany({
     where: or(
       ilike(advocates.firstName, `%${searchQuery}%`),
@@ -43,10 +43,11 @@ const data = await db
     ),
   });
 ```
+### Issues
 
 Also had trouble generating indexes in order to do full-text search:
 
-The below format even though it satisfied the TS error, it did not generate the indexes. when running npx drizzle-kit generate or npx drizzle-kit push
+The drizzle-orm documentation mentioned a different format (currently used) but that resulted in a TypeScript error. I tried to solve the TS error and was able to by using the below format. However, this did not generate the indexes. when running `npx drizzle-kit generate` or `npx drizzle-kit push`. So, based on a linked issue on the drizzle repository, I reverted to the format in the documentation and sure enough, the indexes were generated. I disabled the TS error with a note.
 
 ```
   (table) => ({

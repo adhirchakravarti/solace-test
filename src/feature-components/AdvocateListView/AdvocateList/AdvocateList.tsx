@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState } from "react";
+import React from "react";
 
 import { useAdvocateContext } from "../advocate-context";
 
 export function AdvocateList() {
-  const { filteredAdvocates } = useAdvocateContext();
+  const { advocates } = useAdvocateContext();
 
   return (
     <table>
@@ -21,7 +21,7 @@ export function AdvocateList() {
         </tr>
       </thead>
       <tbody>
-        {filteredAdvocates.map((advocate) => {
+        {advocates.map((advocate) => {
           return (
             <tr key={advocate.id}>
               <td>{advocate.firstName}</td>

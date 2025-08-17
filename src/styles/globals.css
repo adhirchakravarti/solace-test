@@ -1,5 +1,5 @@
 @import "tailwindcss";
-/* @plugin "../../hero.ts"; */
+
 @config "../../tailwind.config.ts";
 
 @custom-variant dark (&:is(.dark *));

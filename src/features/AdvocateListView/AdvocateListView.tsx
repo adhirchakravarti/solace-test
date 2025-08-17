@@ -2,17 +2,22 @@
 
 import React, { useEffect } from "react";
 
+import { useTheme } from "next-themes";
+
 import type { SelectAdvocates } from "@/db/schema";
 
 import { useAdvocateContext } from "@/features/AdvocateListView/advocate-context";
 import { AdvocateList } from "@/features/AdvocateListView/AdvocateList/AdvocateList";
 import { AdvocateSearch } from "@/features/AdvocateListView/AdvocateSearch/AdvocateSearch";
 
+import { ThemeSwitch } from "@/components/ThemeSwitch/ThemeSwitch";
+
 interface AdvocateListViewProps {
   advocates: SelectAdvocates[];
 }
 
 export function AdvocateListView({ advocates }: AdvocateListViewProps) {
+  const { theme } = useTheme();
   const { setAdvocates } = useAdvocateContext();
 
   useEffect(() => {
@@ -20,16 +25,17 @@ export function AdvocateListView({ advocates }: AdvocateListViewProps) {
   }, [advocates, setAdvocates]);
 
   return (
-    <main style={{ margin: "24px" }}>
-      <h1>Solace Advocates</h1>
-      <br />
-      <br />
+    <main
+      className={`${theme} text-foreground bg-background flex flex-col container mx-auto max-w-8xl z-10 px-6 min-h-[calc(100vh)] mb-12 grow gap-8`}
+    >
+      <div className="flex self-end">
+        <ThemeSwitch />
+      </div>
+      <h1 className="text-5xl font-normal text-center">
+        Solace Health Advocates
+      </h1>
       <AdvocateSearch />
-      <br />
-      <br />
       <AdvocateList />
-      <br />
-      <br />
     </main>
   );
 }

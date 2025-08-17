@@ -23,11 +23,15 @@ export function AdvocateListView({ advocates }: AdvocateListViewProps) {
   }, [advocates, setAdvocates]);
 
   return (
-    <main className={`${theme} text-foreground bg-background flex flex-col container mx-auto max-w-8xl z-10 px-6 min-h-[calc(100vh)] mb-12 grow gap-8`}>
+    <main
+      className={`${theme} text-foreground bg-background flex flex-col container mx-auto max-w-8xl z-10 px-6 min-h-[calc(100vh)] mb-12 grow gap-8`}
+    >
       <div className="flex self-end">
         <ThemeSwitch />
       </div>
-      <h1 className="text-5xl font-normal text-center">Solace Health Advocates</h1>
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-normal text-center">
+        Solace Health Advocates
+      </h1>
       <AdvocateSearch />
       <AdvocateList />
     </main>

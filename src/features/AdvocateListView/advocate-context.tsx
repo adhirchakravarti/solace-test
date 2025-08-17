@@ -2,9 +2,11 @@ import { useSearchParams, usePathname } from "next/navigation";
 
 import React, {
   createContext,
+  type FC,
   useCallback,
   useContext,
   useEffect,
+  useState,
 } from "react";
 
 import { useDebouncedCallback } from "use-debounce";
@@ -22,13 +24,14 @@ import type {
 } from "@/features/AdvocateListView/types";
 
 export interface AdvocateContextType {
+  advocates: SelectAdvocates[];
+  isLoading?: boolean;
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   sortDescriptor: AdvocatesSortDescriptor;
   setSortDescriptor: React.Dispatch<
     React.SetStateAction<AdvocatesSortDescriptor>
   >;
-  advocates: SelectAdvocates[];
   setAdvocates: React.Dispatch<React.SetStateAction<SelectAdvocates[]>>;
 }
 
@@ -44,11 +47,25 @@ export const useAdvocateContext = (): AdvocateContextType => {
   return context;
 };
 
-export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
+export const AdvocateProvider: FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
+
+  const [searchTerm, setSearchTerm] = useState<string>(
+    searchParams.get("searchTerm") || ""
+  );
+  const [sortDescriptor, setSortDescriptor] = useState<AdvocatesSortDescriptor>(
+    {
+      column: searchParams.get(SearchParamKeys.sortBy) ?? "firstName",
+      direction:
+        (searchParams.get(SearchParamKeys.sortDirection) as SortDirection) ??
+        SortDirections.ascending,
+    }
+  );
+  const [advocates, setAdvocates] = useState<SelectAdvocates[]>([]);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   const getAdvocates = useCallback(async () => {
     try {
@@ -63,7 +80,6 @@ export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
             return acc;
           }, "")
         : "";
-      console.log({ formattedParams });
       const url = `/advocates${
         formattedParams.length ? `${formattedParams}` : ""
       }`;
@@ -78,21 +94,11 @@ export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [searchParams]);
 
-  const throttledCallback = useDebouncedCallback(() => {
-    getAdvocates();
+  const throttledCallback = useDebouncedCallback(async () => {
+    setIsFetching(true);
+    await getAdvocates();
+    setIsFetching(false);
   }, 800);
-
-  const [searchTerm, setSearchTerm] = React.useState<string>(
-    searchParams.get("searchTerm") || ""
-  );
-  const [sortDescriptor, setSortDescriptor] =
-    React.useState<AdvocatesSortDescriptor>({
-      column: searchParams.get(SearchParamKeys.sortBy) ?? "firstName",
-      direction:
-        (searchParams.get(SearchParamKeys.sortDirection) as SortDirection) ??
-        SortDirections.ascending,
-    });
-  const [advocates, setAdvocates] = React.useState<SelectAdvocates[]>([]);
 
   const handleUpdateSearchParams = useCallback(
     (input: HandleUpdateSearchParamsInput) => {
@@ -119,9 +125,6 @@ export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const trimmedSearchTerm = searchTerm.trim();
-    // if (!trimmedSearchTerm) {
-    //   return;
-    // }
     const params = {
       [SearchParamKeys.searchTerm]: trimmedSearchTerm,
     };
@@ -145,6 +148,7 @@ export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
         setSortDescriptor,
         advocates,
         setAdvocates,
+        isLoading: isFetching,
       }}
     >
       {children}

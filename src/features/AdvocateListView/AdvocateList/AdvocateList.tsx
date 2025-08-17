@@ -54,8 +54,13 @@ const COLUMNS = [
 ];
 
 export function AdvocateList() {
-  const { advocates, searchTerm, sortDescriptor, setSortDescriptor } =
-    useAdvocateContext();
+  const {
+    advocates,
+    searchTerm,
+    sortDescriptor,
+    setSortDescriptor,
+    isLoading,
+  } = useAdvocateContext();
 
   const handleSortChange = (sortDescriptor: AdvocatesSortDescriptor) => {
     const { column, direction } = sortDescriptor;
@@ -84,6 +89,7 @@ export function AdvocateList() {
       </TableHeader>
       <TableBody
         items={advocates}
+        isLoading={isLoading}
         loadingContent={<Spinner label="Loading..." />}
         {...(advocates.length === 0 && {
           emptyContent: searchTerm.length

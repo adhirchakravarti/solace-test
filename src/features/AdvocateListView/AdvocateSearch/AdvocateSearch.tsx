@@ -22,7 +22,6 @@ export function AdvocateSearch() {
           type="text"
           isClearable
           onClear={() => setSearchTerm("")}
-          pattern="^[A-Za-z0-9]+(?:['-][A-Za-z0-9]+)*(?:\s+[A-Za-z0-9]+(?:['-][A-Za-z0-9]+)*)*$"
           placeholder="Search based on name, city, degree or specialization"
           variant="bordered"
           onValueChange={handleValueChange}

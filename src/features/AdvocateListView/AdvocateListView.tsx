@@ -20,16 +20,10 @@ export function AdvocateListView({ advocates }: AdvocateListViewProps) {
   }, [advocates, setAdvocates]);
 
   return (
-    <main style={{ margin: "24px" }}>
-      <h1>Solace Advocates</h1>
-      <br />
-      <br />
+    <main className="flex flex-col container mx-auto max-w-8xl z-10 px-6 min-h-[calc(100vh)] mb-12 grow gap-8">
+      <h1 className="text-4xl">Solace Advocates</h1>
       <AdvocateSearch />
-      <br />
-      <br />
       <AdvocateList />
-      <br />
-      <br />
     </main>
   );
 }

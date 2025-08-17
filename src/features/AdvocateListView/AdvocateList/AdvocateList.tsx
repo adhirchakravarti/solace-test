@@ -1,44 +1,70 @@
-'use client';
+"use client";
 
 import React from "react";
 
+import {
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  getKeyValue,
+} from "@heroui/react";
+
 import { useAdvocateContext } from "@/features/AdvocateListView/advocate-context";
+
+const COLUMNS = [
+  {
+    key: "firstName",
+    label: "FIRST NAME",
+  },
+  {
+    key: "lastName",
+    label: "LAST NAME",
+  },
+  {
+    key: "city",
+    label: "CITY",
+  },
+  {
+    key: "degree",
+    label: "DEGREE",
+  },
+  {
+    key: "specialties",
+    label: "SPECIALTIES",
+  },
+  {
+    key: "yearsOfExperience",
+    label: "YEARS OF EXPERIENCE",
+  },
+  {
+    key: "phoneNumber",
+    label: "PHONE NUMBER",
+  },
+];
 
 export function AdvocateList() {
   const { advocates } = useAdvocateContext();
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>City</th>
-          <th>Degree</th>
-          <th>Specialties</th>
-          <th>Years of Experience</th>
-          <th>Phone Number</th>
-        </tr>
-      </thead>
-      <tbody>
-        {advocates.map((advocate) => {
-          return (
-            <tr key={advocate.id}>
-              <td>{advocate.firstName}</td>
-              <td>{advocate.lastName}</td>
-              <td>{advocate.city}</td>
-              <td>{advocate.degree}</td>
-              <td>
-                {advocate.specialties.map((s) => (
-                  <div key={s}>{s}</div>
-                ))}
-              </td>
-              <td>{advocate.yearsOfExperience}</td>
-              <td>{advocate.phoneNumber}</td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <Table aria-label="Advocate table with name, city, degree, specialties, years of experience and phone number">
+      <TableHeader columns={COLUMNS}>
+        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+      </TableHeader>
+      <TableBody items={advocates}>
+        {(item) => (
+          <TableRow key={item.id}>
+            {(columnKey) => {
+              const value = getKeyValue(item, columnKey)
+              const formattedValue = Array.isArray(value)
+                ? value.join(", ") : value;
+              return <TableCell>{formattedValue}</TableCell>;
+            }}
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
   );
 }

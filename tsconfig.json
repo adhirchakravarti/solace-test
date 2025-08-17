@@ -39,7 +39,10 @@
       ],
       "@/components/*": [
         "./src/components/*"
-      ]
+      ],
+      "@/styles/*": [
+        "./src/styles/*"
+      ],
     }
   },
   "include": [

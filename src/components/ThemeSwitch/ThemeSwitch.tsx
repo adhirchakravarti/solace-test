@@ -1,11 +1,7 @@
 "use client";
 import React, { SVGProps } from "react";
 
-import {
-  type SwitchProps,
-  useSwitch,
-  VisuallyHidden,
-} from "@heroui/react";
+import { type SwitchProps, useSwitch, VisuallyHidden } from "@heroui/react";
 import { useTheme } from "next-themes";
 
 const MoonIcon = (props: SVGProps<SVGSVGElement>) => {
@@ -62,17 +58,13 @@ export function ThemeSwitch(props: SwitchProps) {
     },
     isSelected: isLightMode,
     color: "default",
+    "aria-label": `switch theme to ${isLightMode ? "dark mode" : "light mode"}`,
+    ...props,
   });
   return (
     <Component {...getBaseProps()}>
       <VisuallyHidden>
-        <input
-          {...getInputProps()}
-          aria-label={`switch theme to ${
-            isLightMode ? "dark mode" : "light mode"
-          }`}
-          color="default"
-        />
+        <input {...getInputProps()} color="default" />
       </VisuallyHidden>
       <div
         {...getWrapperProps()}

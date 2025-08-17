@@ -3,7 +3,7 @@ import { typedFetch } from "@/utils/typedFetch";
 
 import { AdvocateListView } from "@/features/AdvocateListView/AdvocateListView";
 
-export default async function Home({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+export default async function RootPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
   let advocateList: SelectAdvocates[] = [];
   try {
     const { searchTerm } = searchParams;

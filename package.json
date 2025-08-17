@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "type-check": "tsc --noEmit",
     "generate": "drizzle-kit generate",
     "migrate:up": "node ./src/db/migrate.js",
     "seed": "node --loader esbuild-register/loader -r esbuild-register ./src/db/seed/index.ts"
@@ -16,7 +17,7 @@
     "dotenv": "^17.2.1",
     "drizzle-orm": "^0.32.1",
     "framer-motion": "^12.23.12",
-    "next": "^14.2.19",
+    "next": "^14.2.30",
     "next-themes": "^0.4.6",
     "postgres": "^3.4.4",
     "react": "^18.3.1",

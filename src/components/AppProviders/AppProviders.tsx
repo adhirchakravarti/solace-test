@@ -1,8 +1,15 @@
 "use client";
 
 import React from "react";
+
+import { HeroUIProvider } from "@heroui/react";
+
 import { AdvocateProvider } from "@/features/AdvocateListView/advocate-context";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
-  return <AdvocateProvider>{children}</AdvocateProvider>;
+  return (
+    <HeroUIProvider>
+      <AdvocateProvider>{children}</AdvocateProvider>
+    </HeroUIProvider>
+  );
 }

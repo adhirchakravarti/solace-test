@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-
+ @config "../../tailwind.config.ts";
 @theme {
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
   --background-image-gradient-conic: conic-gradient(

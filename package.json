@@ -12,8 +12,10 @@
     "seed": "node --loader esbuild-register/loader -r esbuild-register ./src/db/seed/index.ts"
   },
   "dependencies": {
+    "@heroui/react": "^2.8.0-beta.7",
     "dotenv": "^17.2.1",
     "drizzle-orm": "^0.32.1",
+    "framer-motion": "^12.18.1",
     "next": "15.3.2",
     "postgres": "^3.4.4",
     "react": "^19.1.0",
@@ -28,7 +30,7 @@
     "drizzle-kit": "^0.23.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.5",
-    "postcss": "^8.4.40",
+    "postcss": "^8.5.5",
     "tailwindcss": "^4.1.12",
     "typescript": "^5.5.4"
   }

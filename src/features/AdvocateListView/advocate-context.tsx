@@ -11,10 +11,23 @@ import { useDebouncedCallback } from "use-debounce";
 
 import type { SelectAdvocates } from "@/db/schema";
 import { typedFetch } from "@/utils/typedFetch";
+import {
+  SearchParamKeys,
+  SortDirections,
+} from "@/features/AdvocateListView/constants";
+import type {
+  HandleUpdateSearchParamsInput,
+  AdvocatesSortDescriptor,
+  SortDirection,
+} from "@/features/AdvocateListView/types";
 
 export interface AdvocateContextType {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
+  sortDescriptor: AdvocatesSortDescriptor;
+  setSortDescriptor: React.Dispatch<
+    React.SetStateAction<AdvocatesSortDescriptor>
+  >;
   advocates: SelectAdvocates[];
   setAdvocates: React.Dispatch<React.SetStateAction<SelectAdvocates[]>>;
 }
@@ -37,9 +50,23 @@ export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const getAdvocates = async (searchTerm: string) => {
+  const getAdvocates = useCallback(async () => {
     try {
-      const url = `/advocates${searchTerm ? `?searchTerm=${searchTerm}` : ""}`;
+      const formattedParams = searchParams.size
+        ? searchParams.entries().reduce((acc, [key, value], index) => {
+            const isFirstItem = index === 0;
+            if (value) {
+              acc += `${isFirstItem ? "?" : "&"}${key}=${encodeURIComponent(
+                value
+              )}`;
+            }
+            return acc;
+          }, "")
+        : "";
+      console.log({ formattedParams });
+      const url = `/advocates${
+        formattedParams.length ? `${formattedParams}` : ""
+      }`;
       const data = await typedFetch<{ data: SelectAdvocates[] }>(url);
       if (data?.data && data.data.length) {
         setAdvocates(data.data);
@@ -49,46 +76,73 @@ export const AdvocateProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       console.warn("Error when fetching advocate list on client side", error);
     }
-  };
+  }, [searchParams]);
 
-  const throttledCallback = useDebouncedCallback((searchTerm: string) => {
-    getAdvocates(searchTerm);
+  const throttledCallback = useDebouncedCallback(() => {
+    getAdvocates();
   }, 800);
 
   const [searchTerm, setSearchTerm] = React.useState<string>(
     searchParams.get("searchTerm") || ""
   );
+  const [sortDescriptor, setSortDescriptor] =
+    React.useState<AdvocatesSortDescriptor>({
+      column: searchParams.get(SearchParamKeys.sortBy) ?? "firstName",
+      direction:
+        (searchParams.get(SearchParamKeys.sortDirection) as SortDirection) ??
+        SortDirections.ascending,
+    });
   const [advocates, setAdvocates] = React.useState<SelectAdvocates[]>([]);
 
   const handleUpdateSearchParams = useCallback(
-    (trimmedSearchTerm: string) => {
+    (input: HandleUpdateSearchParamsInput) => {
       const params = new URLSearchParams(searchParams);
-      if (trimmedSearchTerm) {
-        params.set("searchTerm", trimmedSearchTerm);
-      } else {
-        params.delete("searchTerm");
+      for (const [paramKey, paramValue] of Object.entries(input)) {
+        if (paramValue) {
+          params.set(paramKey, paramValue);
+        } else {
+          params.delete(paramKey);
+        }
       }
-      
+
       window.history.pushState(
         null,
         "",
-        `${pathname}${params.has("searchTerm") ? `?${params.toString()}` : ""}`
+        `${pathname}${
+          Object.values(input).length ? `?${params.toString()}` : ""
+        }`
       );
+      throttledCallback();
     },
-    [pathname, searchParams]
+    [pathname, searchParams, throttledCallback]
   );
 
   useEffect(() => {
     const trimmedSearchTerm = searchTerm.trim();
-    handleUpdateSearchParams(trimmedSearchTerm);
-    throttledCallback(trimmedSearchTerm);
-  }, [searchTerm, pathname, throttledCallback, handleUpdateSearchParams]);
+    // if (!trimmedSearchTerm) {
+    //   return;
+    // }
+    const params = {
+      [SearchParamKeys.searchTerm]: trimmedSearchTerm,
+    };
+    handleUpdateSearchParams(params);
+  }, [searchTerm, handleUpdateSearchParams]);
+
+  useEffect(() => {
+    const updateSearchParamInput = {
+      [SearchParamKeys.sortBy]: sortDescriptor.column as string,
+      [SearchParamKeys.sortDirection]: sortDescriptor.direction,
+    };
+    handleUpdateSearchParams(updateSearchParamInput);
+  }, [sortDescriptor, handleUpdateSearchParams]);
 
   return (
     <AdvocateContext.Provider
       value={{
         searchTerm,
         setSearchTerm,
+        sortDescriptor,
+        setSortDescriptor,
         advocates,
         setAdvocates,
       }}

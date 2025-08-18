@@ -94,8 +94,9 @@ To improve this project further, I would do the following:
 
 1. Improve the filtering at the SQL level so that even partial words can be matched. 
 2. Add pagination on both the backend and the frontend to fetch a subset of rows.
-3. Add a docker or docker compose configuration to deploy and run the app.
-4. Add a github workflow to run some checks before PRs are merged (linting, typechecking, tests, build, etc)
-5. Add e2e / integration tests that test all the functionality.
-6. Redo the ESlint configuration with stricter rules and auto-formatting functionality such as sorting imports in a certain order for readability and adding an empty line between related blocks of logic.
+3. Add input validation for the search filter.
+4. Add a docker or docker compose configuration to deploy and run the app.
+5. Add a github workflow to run some checks before PRs are merged (linting, typechecking, tests, build, etc)
+6. Add e2e / integration tests that test all the functionality.
+7. Redo the ESlint configuration with stricter rules and auto-formatting functionality such as sorting imports in a certain order for readability and adding an empty line between related blocks of logic.
 

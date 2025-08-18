@@ -7,6 +7,7 @@ import { HeroUIProvider } from "@heroui/react";
 
 import { AdvocateProvider } from "@/features/AdvocateListView/advocate-context";
 
+// Dynamically import the ThemeProvider to avoid server hydration errors
 const NextThemesProvider = dynamic(
   () => import("next-themes").then((module) => module.ThemeProvider),
   { ssr: false }

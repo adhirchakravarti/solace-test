@@ -24,16 +24,18 @@ export function AdvocateListView({ advocates }: AdvocateListViewProps) {
 
   return (
     <main
-      className={`${theme} text-foreground bg-background flex flex-col container mx-auto max-w-8xl px-6 min-h-[calc(100vh)] mb-12 grow gap-8`}
+      className={`${theme} bg-gradient-light dark:bg-gradient-dark text-foreground w-full`}
     >
-      <div className="flex self-end">
-        <ThemeSwitch />
+      <div className="flex flex-col grow container gap-8 mx-auto max-w-8xl px-6 py-6 min-h-[calc(100vh)] pb-12">
+        <div className="flex self-end">
+          <ThemeSwitch />
+        </div>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-normal text-center">
+          Solace Health Advocates
+        </h1>
+        <AdvocateSearch />
+        <AdvocateList />
       </div>
-      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-normal text-center">
-        Solace Health Advocates
-      </h1>
-      <AdvocateSearch />
-      <AdvocateList />
     </main>
   );
 }

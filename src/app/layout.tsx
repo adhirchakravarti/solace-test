@@ -19,10 +19,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${lexendDeca.className} h-dvh w-full p-6`}>
-        <AppProviders>
-          {children}
-        </AppProviders>
+      <body className={`${lexendDeca.className}`}>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );

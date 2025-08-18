@@ -79,6 +79,7 @@ export function AdvocateList() {
       }
       sortDescriptor={sortDescriptor}
       onSortChange={handleSortChange}
+      isStriped
     >
       <TableHeader columns={COLUMNS}>
         {(column) => (

@@ -24,7 +24,7 @@ export function AdvocateListView({ advocates }: AdvocateListViewProps) {
 
   return (
     <main
-      className={`${theme} text-foreground bg-background flex flex-col container mx-auto max-w-8xl z-10 px-6 min-h-[calc(100vh)] mb-12 grow gap-8`}
+      className={`${theme} text-foreground bg-background flex flex-col container mx-auto max-w-8xl px-6 min-h-[calc(100vh)] mb-12 grow gap-8`}
     >
       <div className="flex self-end">
         <ThemeSwitch />

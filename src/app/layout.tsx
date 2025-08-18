@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Lexend_Deca } from "next/font/google";
 import { AppProviders } from "@/components/AppProviders/AppProviders";
-import "./globals.css";
+import "@/styles/globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const lexendDeca = Lexend_Deca({
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Solace Candidate Assignment",
@@ -16,8 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${lexendDeca.className}`}>
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

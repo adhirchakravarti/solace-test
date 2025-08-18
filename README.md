@@ -10,6 +10,12 @@ Install dependencies
 npm i
 ```
 
+Add the following environment variables to an `.env` or `.env.local` file
+```
+DATABASE_URL=postgresql://<username>:<password>@<host>:<port>/<dbname>
+NEXT_PUBLIC_API_BASE_URL=http://<hostname>:<port>/api
+```
+
 Run the development server:
 
 ```bash
